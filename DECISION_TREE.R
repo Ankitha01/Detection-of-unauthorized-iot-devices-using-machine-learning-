@@ -1,0 +1,18 @@
+library(tidyverse)
+library(e1071)
+library(dplyr)
+library(caret)
+a <- KDDTrain20 %>% select (5:19)
+b <- KDDTrain20 %>% select (22:41)
+KDDTrain <- cbind(a,b)
+a <- KDDTest.21 %>% select (5:19)
+b <- KDDTest.21 %>% select (22:41)
+KDDTest <- cbind(a,b)
+attack =as.factor((KDDTrain20[,42]))
+KDDTrain$attack.new = attack
+attack =as.factor((KDDTest.21[,42]))
+KDDTest$attack.new = attack
+model<- ctree(formula = KDDTrain$attack.new~ ., data = KDDTrain)
+y_pred = predict(classifier, newdata = KDDTest)
+cm = table(KDDTest.21[,42], y_pred)
+print(cm)
